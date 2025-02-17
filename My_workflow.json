@@ -1,0 +1,168 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI assistant with access to a CSV document containing structured data. Your task is to analyze the document and answer questions based on the provided data.\n\nIf the answer can be derived from the CSV, provide an accurate response with relevant details.\nIf the information is not available in the CSV, state: 'I cannot find this information in the provided data.'\nUse your general knowledge only to explain concepts related to the question but do not fabricate details about the CSV if they are not present.\nAlways prioritize factual accuracy over speculation.\nNow, analyze the CSV and answer the following question:{{ $json.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        220,
+        0
+      ],
+      "id": "abc0ec79-5126-42fe-bce5-c55b7be36381",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        220
+      ],
+      "id": "bc5fd673-0590-421a-b984-bde3937391d9",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "pXRryNSutY9UxBGE",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Selva. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        160
+      ],
+      "id": "b6f08d73-25f7-4d70-846a-96769e3b78a1",
+      "name": "When chat message received",
+      "webhookId": "c61928a0-8422-48e2-91bf-4a074ea41ea8"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VHHTXoT6hwgvb-GmbLBMOrDclgcZeDoa4LtO3Q_txb0",
+          "mode": "list",
+          "cachedResultName": "Santhosh anna project",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VHHTXoT6hwgvb-GmbLBMOrDclgcZeDoa4LtO3Q_txb0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1862731658,
+          "mode": "list",
+          "cachedResultName": "Diag_AI_Database_Ver1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VHHTXoT6hwgvb-GmbLBMOrDclgcZeDoa4LtO3Q_txb0/edit#gid=1862731658"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        220
+      ],
+      "id": "a66d8a5c-1676-4e6c-80f9-8fb9af9b0147",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IHAz6Nj8t6AvCYQr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        340,
+        280
+      ],
+      "id": "bc48657c-a0b0-46f9-92f4-8cb83940a343",
+      "name": "Window Buffer Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9cedc32d-fe3d-415f-ab4c-4446c877bb2e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c13a1abe1e018725d8a5dacb3eacfaf721b619042046eea9ca7924c21b5d6c08"
+  },
+  "id": "6hA2kvsOxgAm6lHx",
+  "tags": []
+}
